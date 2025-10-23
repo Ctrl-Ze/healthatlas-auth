@@ -6,8 +6,11 @@ quarkus:
     username: postgres
     password: postgres
     jdbc:
-      url: ${QUARKUS_DATASOURCE_URL}
+      url: "jdbc:postgresql://localhost:5434/cerberus"
   flyway:
     migrate-at-start: true
     locations: db/migration
-    debug: true
+  log:
+    category:
+      org.flywaydb:
+        level: DEBUG

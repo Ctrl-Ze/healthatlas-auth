@@ -10,22 +10,25 @@ repositories {
 
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+    // Core REST, Config, Health, etc.
     implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'io.quarkus:quarkus-config-yaml'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
-    implementation 'io.quarkus:quarkus-jdbc-postgresql'
-
-    // ✅ Add JDBI
-    implementation "org.jdbi:jdbi3-core:3.45.0"
-    implementation "org.jdbi:jdbi3-sqlobject:3.45.0"
-    implementation "org.jdbi:jdbi3-postgres:3.45.0"
-
-    // For password hashing, etc.
-    implementation "org.mindrot:jbcrypt:0.4"
-
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-flyway'
+    implementation("io.quarkus:quarkus-rest-jackson") // Use the Quarkus Rest Jackson extension
+
+    // JDBC Driver
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
+    implementation("io.quarkiverse.jdbi:quarkus-jdbi:1.8.1")
+    implementation("org.jdbi:jdbi3-sqlobject")
+
+    // Other utilities
+    implementation "org.mindrot:jbcrypt:0.4"
+    implementation("org.projectlombok:lombok:1.18.42")
+
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }
