@@ -1,3 +1,5 @@
+# Makefile for healthatlas-auth
+
 # Variables
 IMAGE_NAME := healthatlas-auth
 DOCKERFILE := Dockerfile.jvm
@@ -9,20 +11,15 @@ restart: docker-down build docker-build docker-up
 # Stop running containers
 docker-down:
 	@echo "🛑 Stopping Docker Compose..."
-	docker-compose down || true
+	docker-compose down -v || true
 
-# Build project
+# Build Quarkus app
 build:
-	@echo "📦 Building the project (skipping tests)..."
-	./gradlew build -x test
-
-# Copy built jar
-copy-jar:
-	@echo "📄 Copying JAR..."
-	cp build/libs/*.jar healthatlas-auth.jar
+	@echo "📦 Building Quarkus app (fast-jar)..."
+	./gradlew clean quarkusBuild -x test
 
 # Docker build with fallback logic
-docker-build: copy-jar
+docker-build:
 	@echo "🐳 Building Docker image..."
 	@if docker build -f $(DOCKERFILE) -t $(IMAGE_NAME):latest .; then \
 		echo "✅ Docker image built successfully from $(DOCKERFILE)"; \
@@ -38,3 +35,13 @@ docker-build: copy-jar
 docker-up:
 	@echo "🚀 Starting Docker Compose..."
 	docker-compose up -d
+
+# Tail logs
+logs:
+	@echo "🪵 Showing logs for Cerberus..."
+	docker-compose logs -f healthatlas-auth
+
+# Access Cerberus DB
+db:
+	@echo "🗄️ Connecting to Cerberus database..."
+	docker exec -it cerberus-db psql -U postgres -d cerberus

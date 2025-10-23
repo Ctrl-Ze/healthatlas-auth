@@ -1,2 +1,13 @@
 greeting:
   message: "hello"
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: ${QUARKUS_DATASOURCE_URL}
+  flyway:
+    migrate-at-start: true
+    locations: db/migration
+    debug: true
