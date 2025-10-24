@@ -1,5 +1,10 @@
-src
-!build/*-runner
-!build/*-runner.jar
-!build/lib/*
-!build/quarkus-app/*
+# .dockerignore
+.gradle
+.gradle-cache
+.idea
+.vscode
+node_modules
+*.log
+.git
+.gitignore
+**/target
