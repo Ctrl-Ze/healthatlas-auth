@@ -1,11 +1,13 @@
-# Dockerfile.jvm — copies the full Quarkus fast-jar layout
+# Dockerfile.jvm
 FROM eclipse-temurin:21-jre
+
 WORKDIR /app
 
-# Copy the pre-built quarkus-app folder (produced by ./gradlew build)
+# Copy all Quarkus build output
 COPY build/quarkus-app/ ./
 
-EXPOSE 8080
+# (Optional) check file exists before running
+RUN test -f quarkus-run.jar || (echo "❌ quarkus-run.jar not found in /app" && ls -R /app && exit 1)
 
-# Important: run the quarkus-run.jar from the quarkus-app layout
-ENTRYPOINT ["java","-jar","quarkus-run.jar"]
+EXPOSE 8080
+CMD ["java", "-jar", "quarkus-run.jar"]

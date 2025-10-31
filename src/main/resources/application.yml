@@ -1,2 +1,31 @@
+# Common defaults (used when no profile override)
 greeting:
   message: "hello"
+
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: ${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5434/cerberus}
+  http:
+    port: 8080
+  flyway:
+    migrate-at-start: true
+    locations: db/migration
+  otel:
+    enabled: true
+    exporter:
+      otlp:
+        endpoint: http://localhost:4317
+        protocol: grpc
+  log:
+    category:
+      org.flywaydb:
+        level: DEBUG
+    console:
+      format: "%d{HH:mm:ss} %-5p [%X{X-Trace-Id}] %c{1.} - %m%n"
+  metrics:
+    enabled: true
+    path: /metrics

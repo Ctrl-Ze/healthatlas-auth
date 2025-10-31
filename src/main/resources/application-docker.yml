@@ -1,0 +1,15 @@
+quarkus:
+  datasource:
+    jdbc:
+      url: jdbc:postgresql://cerberus-db:5432/cerberus
+    username: postgres
+    password: postgres
+    db-kind: postgresql
+
+  flyway:
+    migrate-at-start: true
+
+  log:
+    category:
+      org.flywaydb:
+        level: INFO
