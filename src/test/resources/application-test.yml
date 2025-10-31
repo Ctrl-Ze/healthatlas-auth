@@ -1,0 +1,14 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/cerberus_test
+  flyway:
+    migrate-at-start: true
+    locations: classpath:db/migration
+  log:
+    level: INFO
+    console:
+      format: "%d{HH:mm:ss} %-5p [%X{traceId}] %c{1.} - %m%n"

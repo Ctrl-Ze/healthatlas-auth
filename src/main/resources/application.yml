@@ -14,7 +14,18 @@ quarkus:
   flyway:
     migrate-at-start: true
     locations: db/migration
+  otel:
+    enabled: true
+    exporter:
+      otlp:
+        endpoint: http://localhost:4317
+        protocol: grpc
   log:
     category:
       org.flywaydb:
         level: DEBUG
+    console:
+      format: "%d{HH:mm:ss} %-5p [%X{X-Trace-Id}] %c{1.} - %m%n"
+  metrics:
+    enabled: true
+    path: /metrics

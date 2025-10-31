@@ -1,15 +1,17 @@
-package com.healthatlas.auth;
+package com.healthatlas.auth.health;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
 
 @Liveness
-public class MyLivenessCheck implements HealthCheck {
+@ApplicationScoped
+public class LivenessCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        return HealthCheckResponse.up("alive");
+        return HealthCheckResponse.up("healthatlas-auth-alive");
     }
 
 }

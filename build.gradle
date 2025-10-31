@@ -20,17 +20,26 @@ dependencies {
     implementation 'io.quarkus:quarkus-flyway'
     implementation("io.quarkus:quarkus-rest-jackson") // Use the Quarkus Rest Jackson extension
 
-    // JDBC Driver
+    // Data base
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation("io.quarkiverse.jdbi:quarkus-jdbi:1.8.1")
     implementation("org.jdbi:jdbi3-sqlobject")
 
     // Other utilities
     implementation "org.mindrot:jbcrypt:0.4"
-    implementation("org.projectlombok:lombok:1.18.42")
+    compileOnly "org.projectlombok:lombok:1.18.42"
+    annotationProcessor "org.projectlombok:lombok:1.18.42"
+    testCompileOnly "org.projectlombok:lombok:1.18.42"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.42"
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+
+    implementation 'io.quarkus:quarkus-opentelemetry'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
 }
 
 group 'com.healthatlas'

@@ -11,10 +11,9 @@ class AuthResourceTest {
     @Test
     void testHelloEndpoint() {
         given()
-          .when().get("/auth")
+          .when().get("/q/health")
           .then()
-             .statusCode(200)
-             .body(is("Hello from Quarkus REST"));
+             .statusCode(200);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.healthatlas.auth;
+package com.healthatlas.auth.config;
 
 import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;

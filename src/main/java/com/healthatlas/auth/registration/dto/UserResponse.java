@@ -1,6 +1,6 @@
-package com.healthatlas.auth;
+package com.healthatlas.auth.registration.dto;
 
-public record UserResponseDto(
+public record UserResponse(
         long id,
         String username,
         String email,

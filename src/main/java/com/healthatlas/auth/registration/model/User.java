@@ -1,4 +1,4 @@
-package com.healthatlas.auth;
+package com.healthatlas.auth.registration.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -93,6 +93,13 @@ db:
 	@echo "🗄️ Connecting to Cerberus DB in docker..."
 	docker exec -it cerberus-db psql -U postgres -d cerberus
 
+otel-up:
+	docker-compose -f otel-compose.yml up -d
+
+otel-down:
+	docker-compose -f otel-compose.yml down
+
+
 # -------------------------
 # Clean convenience
 # -------------------------
