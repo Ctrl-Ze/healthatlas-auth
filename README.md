@@ -1,84 +1,66 @@
-# healthatlas-auth
+# healthatlas-auth (Cerberus)
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+**Codename:** Cerberus — *the guardian of the HealthAtlas gates.*
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Cerberus is the authentication and authorization service of the HealthAtlas ecosystem.  
+It guards user identities, issues JWT access tokens, enforces access control, and provides foundational security APIs for the entire platform.
 
-## Running the application in dev mode
+---
 
-You can run your application in dev mode that enables live coding using:
+## Responsibilities
+- User registration and credential management
+- Secure login with password hashing (BCrypt)
+- JWT generation and validation for authenticated access
+- Role-based authorization via embedded claims
+- Exception mapping and consistent error responses
+- Trace ID propagation for observability and debugging
+- Integration with other services through standardized tokens
 
-```shell script
-./gradlew quarkusDev
-```
+---
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## Security Notes
 
-## Packaging and running the application
+Cerberus uses **JWT (JSON Web Tokens)** for stateless authentication.
 
-The application can be packaged using:
+### Current Token Structure
+Includes:
+- `sub` — username
+- `upn` — user email
+- `user_id` — internal numeric ID (stable across renames)
+- `groups` — user roles (e.g. `USER`, `ADMIN`)
+- `iat` / `exp` — issued and expiration times
+- `iss` — token issuer (`healthatlas`)
 
-```shell script
-./gradlew build
-```
+### TODO (Security Roadmap)
+- [ ] Move private signing key to a secure secret store (Vault / KMS)
+- [ ] Implement key rotation and expose a JWKS endpoint
+- [ ] Add refresh tokens for long-lived sessions
+- [ ] Introduce permissions-based scopes
+- [ ] Implement `/auth/me` endpoint to return user info from JWT
+- [ ] Integrate with Athena for cross-service identity verification
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
+---
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+## Related Services
 
-If you want to build an _über-jar_, execute the following command:
+| Service | Codename | Description |
+|----------|-----------|-------------|
+| healthatlas-core | Athena | Aggregation and orchestration layer |
+| healthatlas-ocr | Hermes | OCR and document extraction |
+| healthatlas-ingest | Iris / Pan | Wearable ingestion |
+| healthatlas-analytics | Themis | Insights and analytics |
+| healthatlas-audit | Mnemosyne | Audit and trace logging |
+| healthatlas-notify | Echo | Alerts and notifications |
+| healthatlas-ai | Chiron | AI and guidance layer |
+| healthatlas-web | Helios | Frontend dashboard |
 
-```shell script
-./gradlew build -Dquarkus.package.jar.type=uber-jar
-```
+---
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
+## Local Development
 
-## Creating a native executable
+Cerberus runs locally with Quarkus and PostgreSQL.  
+Use Docker Compose for a full stack environment:
 
-You can create a native executable using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./gradlew build -Dquarkus.native.enabled=true -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./build/healthatlas-auth-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/gradle-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- SmallRye Health ([guide](https://quarkus.io/guides/smallrye-health)): Monitor service health
-- YAML Configuration ([guide](https://quarkus.io/guides/config-yaml)): Use YAML to configure your Quarkus application
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### YAML Config
-
-Configure your application with YAML
-
-[Related guide section...](https://quarkus.io/guides/config-reference#configuration-examples)
-
-The Quarkus application configuration is located in `src/main/resources/application.yml`.
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-### SmallRye Health
-
-Monitor your application's health using SmallRye Health
-
-[Related guide section...](https://quarkus.io/guides/smallrye-health)
+```bash
+./gradlew build -x test
+docker-compose up --build

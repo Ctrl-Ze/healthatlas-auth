@@ -1,6 +1,5 @@
-package com.healthatlas.auth.registration;
+package com.healthatlas.auth;
 
-import com.healthatlas.auth.PostgresTestResource;
 import com.healthatlas.auth.login.dto.LoginRequest;
 import com.healthatlas.auth.registration.dto.RegistrationRequest;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -13,6 +12,9 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+// TODO: Add integration tests for JWT-protected endpoints using Authorization header.
+// TODO: Add negative tests for expired or tampered tokens.
+
 @QuarkusTest
 @QuarkusTestResource(PostgresTestResource.class)
 @DisplayName("User authentication and registration integration tests")
@@ -21,10 +23,10 @@ public class UserResourceIT {
     @Test
     void shouldCreateUser() {
         var request = new RegistrationRequest(
-                "alex",
-                "alex@example.com",
+                "testUser1",
+                "testUser1@example.com",
                 "Supersecure22#",
-                "Alex Cretu"
+                "Test User1"
         );
         given()
                 .contentType(ContentType.JSON)
@@ -33,17 +35,17 @@ public class UserResourceIT {
                 .post("/auth/register")
         .then()
                 .statusCode(201)
-                .body("username", equalTo("alex"))
-                .body("email", equalTo("alex@example.com"));
+                .body("username", equalTo("testUser1"))
+                .body("email", equalTo("testUser1@example.com"));
     }
 
     @Test
     void shouldFailUsernameValidation() {
         var request = new RegistrationRequest(
                 "",
-                "alex@example.com",
+                "testUser@example.com",
                 "Supersecure22#",
-                "Alex Cretu"
+                "Test User"
         );
         given()
                 .contentType(ContentType.JSON)
@@ -61,10 +63,10 @@ public class UserResourceIT {
     @Test
     void shouldFailEmailValidation() {
         var request = new RegistrationRequest(
-                "alex",
+                "testUser1",
                 "",
                 "Supersecure22#",
-                "Alex Cretu"
+                "Test User"
         );
         given()
                 .contentType(ContentType.JSON)
@@ -81,10 +83,10 @@ public class UserResourceIT {
     @Test
     void shouldFailPasswordValidation() {
         var request = new RegistrationRequest(
-                "alex",
-                "alex@example.com",
+                "testUser2",
+                "testUser2@example.com",
                 "NotSecure",
-                "Alex Cretu"
+                "Test User2"
         );
         given()
                 .contentType(ContentType.JSON)
@@ -102,10 +104,10 @@ public class UserResourceIT {
     @Test
     void shouldFailsUserAlreadyExists() {
         var request = new RegistrationRequest(
-                "george",
-                "george@example.com",
+                "testUser3",
+                "testUser3@example.com",
                 "Supersecure22#",
-                "George Joseph"
+                "Test User3"
         );
         given()
                 .contentType(ContentType.JSON)
@@ -114,8 +116,8 @@ public class UserResourceIT {
                 .post("/auth/register")
                 .then()
                 .statusCode(201)
-                .body("username", equalTo("george"))
-                .body("email", equalTo("george@example.com"));
+                .body("username", equalTo("testUser3"))
+                .body("email", equalTo("testUser3@example.com"));
 
         given()
                 .contentType(ContentType.JSON)
@@ -125,7 +127,7 @@ public class UserResourceIT {
                 .then()
                 .statusCode(409)
                 .body("error", equalTo("UserAlreadyExistsException"))
-                .body("message", equalTo("Username george already exists."))
+                .body("message", equalTo("Username testUser3 already exists."))
                 .body("timestamp", notNullValue())
                 .body("traceId", notNullValue());
     }
@@ -133,14 +135,14 @@ public class UserResourceIT {
     @Test
     void shouldLoginUser() {
         var request = new RegistrationRequest(
-                "alex",
-                "alex@example.com",
+                "testUser4",
+                "testUser4@example.com",
                 "Supersecure22#",
-                "Alex Cretu"
+                "Test User4"
         );
 
         var login = new LoginRequest(
-                "alex",
+                "testUser4",
                 "Supersecure22#"
         );
 
@@ -151,8 +153,8 @@ public class UserResourceIT {
                 .post("/auth/register")
                 .then()
                 .statusCode(201)
-                .body("username", equalTo("alex"))
-                .body("email", equalTo("alex@example.com"));
+                .body("username", equalTo("testUser4"))
+                .body("email", equalTo("testUser4@example.com"));
 
         given()
                 .contentType(ContentType.JSON)
@@ -161,21 +163,22 @@ public class UserResourceIT {
                 .post("/auth/login")
                 .then()
                 .statusCode(200)
-                .body("username", equalTo("alex"))
-                .body("email", equalTo("alex@example.com"));
+                .body("username", equalTo("testUser4"))
+                .body("email", equalTo("testUser4@example.com"))
+                .body("token", notNullValue());
     }
 
     @Test
     void shouldFailBadCredentials() {
         var request = new RegistrationRequest(
-                "george",
-                "george@example.com",
+                "testUser5",
+                "testUser5@example.com",
                 "Supersecure22#",
-                "George Smith"
+                "Test User5"
         );
 
         var login = new LoginRequest(
-                "george",
+                "testUser5",
                 "WrongPassword"
         );
 
@@ -186,8 +189,8 @@ public class UserResourceIT {
                 .post("/auth/register")
                 .then()
                 .statusCode(201)
-                .body("username", equalTo("george"))
-                .body("email", equalTo("george@example.com"));
+                .body("username", equalTo("testUser5"))
+                .body("email", equalTo("testUser5@example.com"));
 
         given()
                 .contentType(ContentType.JSON)

@@ -32,6 +32,9 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:1.18.42"
     testAnnotationProcessor "org.projectlombok:lombok:1.18.42"
     implementation 'io.quarkus:quarkus-hibernate-validator'
+    implementation 'io.quarkus:quarkus-smallrye-jwt'
+    implementation 'io.quarkus:quarkus-smallrye-jwt-build'
+
 
     implementation 'io.quarkus:quarkus-opentelemetry'
 

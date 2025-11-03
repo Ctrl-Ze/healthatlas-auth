@@ -1,6 +1,8 @@
 # Common defaults (used when no profile override)
-greeting:
-  message: "hello"
+
+# TODO: Move private/public keys out of source control before production.
+# TODO: Configure smallrye.jwt.sign.key from Vault or environment variable.
+# TODO: Configure mp.jwt.verify.publickey.location from JWKS endpoint in production.
 
 quarkus:
   datasource:
@@ -29,3 +31,15 @@ quarkus:
   metrics:
     enabled: true
     path: /metrics
+
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: keys/privateKey.pem
+mp:
+  jwt:
+    verify:
+      publickey:
+        location: keys/publicKey.pem
+    issuer: "healthatlas"
