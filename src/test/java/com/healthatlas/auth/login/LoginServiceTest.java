@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
@@ -36,7 +37,7 @@ public class LoginServiceTest {
     @Test
     void shouldLoginSuccessfully() {
         String hashedPassword = BCrypt.hashpw("Supersecure22#", BCrypt.gensalt());
-        User user = new User(1L, "alex", "alex@example.com", hashedPassword, "Alex Cretu");
+        User user = new User(1L, UUID.randomUUID(), "alex", "alex@example.com", hashedPassword, "Alex Cretu");
 
         when(jdbi.onDemand(LoginRepository.class)).thenReturn(repo);
         when(repo.findUserByUsernameOrEmail("alex")).thenReturn(Optional.of(user));
@@ -69,7 +70,7 @@ public class LoginServiceTest {
     @Test
     void shouldFailWhenPasswordInvalid() {
         String hashedPassword = BCrypt.hashpw("Supersecure22#", BCrypt.gensalt());
-        User user = new User(1L, "alex", "alex@example.com", hashedPassword, "Alex Cretu");
+        User user = new User(1L, UUID.randomUUID(), "alex", "alex@example.com", hashedPassword, "Alex Cretu");
 
         when(jdbi.onDemand(LoginRepository.class)).thenReturn(repo);
         when(repo.findUserByUsernameOrEmail("alex")).thenReturn(Optional.of(user));

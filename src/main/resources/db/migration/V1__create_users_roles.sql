@@ -6,6 +6,7 @@ CREATE TABLE roles (
 
 CREATE TABLE users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  public_id UUID DEFAULT gen_random_uuid() UNIQUE,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,

@@ -49,7 +49,7 @@ public class LoginService {
                 .subject(user.getUsername())
                 .upn(user.getEmail())
                 .groups(Set.copyOf(roles))
-                .claim("user_id", user.getId())
+                .claim("user_id", user.getPublicId())
                 .claim("email", user.getEmail())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(3600)) //1h validity
