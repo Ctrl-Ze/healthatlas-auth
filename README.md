@@ -64,3 +64,4 @@ Use Docker Compose for a full stack environment:
 ```bash
 ./gradlew build -x test
 docker-compose up --build
+```
